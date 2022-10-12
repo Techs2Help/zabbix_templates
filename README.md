@@ -1,6 +1,6 @@
 # Custom Zabbix Templates
-Different custom created Zabbix Templates
-__The templates are only a Proof of Concept and they still need to work, be free to make a commit so that together we can help other people to monitor their services with Zabbix__
+Different custom created Zabbix Templates<br>
+__The templates are only a Proof of Concept and they still need to work, be free to make a pull request so that together we can help other people to monitor their services with Zabbix__
 
 Templates:
 - Cardano Node Monitoring:<br>
