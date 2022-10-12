@@ -1,0 +1,382 @@
+zabbix_export:
+  version: '6.0'
+  date: '2022-10-12T13:36:38Z'
+  groups:
+    -
+      uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    -
+      uuid: 473a7710aa2e4020b97bfaab7f639f64
+      template: 'Cardano Node Monitoring'
+      name: 'Cardano Node Monitoring'
+      groups:
+        -
+          name: Templates/Applications
+      items:
+        -
+          uuid: d929d8b026fa48539fa5d1c517530f11
+          name: 'Caradano node: blocks height'
+          type: HTTP_AGENT
+          key: blocks-height
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_blockNum_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 151d8fdc368d42c49defc49fdd5ff8bb
+          name: 'Caradano node: chain density'
+          type: HTTP_AGENT
+          key: chain-density
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_density_real'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseFloat(value.substring(2, value.length-2))*100;'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 15b6915f70f6428186a492b249eeccf4
+          name: 'Cardano node: peers cold (P2P)'
+          type: HTTP_AGENT
+          key: cold-peers-p2p
+          trends: '0'
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_peerSelection_cold'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 809d396251084aaabbf7089ac7df3473
+          name: 'Cardano node: peers duplex (P2P)'
+          type: HTTP_AGENT
+          key: duplex-peers-p2p
+          trends: '0'
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_connectionManager_duplexConns'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 1a4c5f20aebb4404bacfcff4a463c5ee
+          name: 'Cardano protocol: epoch'
+          type: HTTP_AGENT
+          key: epoch
+          delay: 6h
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_epoch_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: e0445b53bc3446c39b1e8aaddcb1be7f
+          name: 'Cardano protocol: epoch progress'
+          type: HTTP_AGENT
+          key: epoch-progress
+          delay: 1h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_slotInEpoch_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return (parseInt(value.substring(2, value.length-2))/432000)*100;'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 7c933b39b3ea480f9b8486346f40830b
+          name: 'Cardano node: peers hot (P2P)'
+          type: HTTP_AGENT
+          key: hot-peers-p2p
+          trends: '0'
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_peerSelection_hot'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: edf22525712848f08acccc0934c0721f
+          name: 'Cardano node: kes keys days left'
+          type: HTTP_AGENT
+          key: kes-keys-days-left
+          delay: 1d
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_remainingKESPeriods_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseFloat(value.substring(2, value.length-2))*1.5;'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 62cb6bbcb95340879d31d2835886b469
+          name: 'Cardano node: late blocks'
+          type: HTTP_AGENT
+          key: late-blocks
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_blockfetchclient_lateblocks'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 66ad0939aafe4206a7a7b62a301885b1
+          name: 'Cardano node: mempool TXs'
+          type: HTTP_AGENT
+          key: mempool-txs
+          delay: 1s
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_txsInMempool_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 3816a9b1e08a4f46a0be47b1b24af316
+          name: 'Cardano Node: missed slots'
+          type: HTTP_AGENT
+          key: missed-slots
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_slotsMissedNum_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 3649fc6b13204574acac01fbc1703a35
+          name: 'Cardano node: peers'
+          type: HTTP_AGENT
+          key: peers
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_connectedPeers_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 62d7a3ebad7549dcab98fa6201228ba3
+          name: 'Cardano node: processed TXs'
+          type: HTTP_AGENT
+          key: processed-txs
+          delay: 5m
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_txsProcessedNum_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+          verify_host: 'YES'
+        -
+          uuid: 3868180bde634fd89b4f5757bd04cbf2
+          name: 'Cardano node: served blocks'
+          type: HTTP_AGENT
+          key: served-blocks
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_served_block_count_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: 8018656f0c33475faee6fc0e788ab5f4
+          name: 'Cardano node: service uptime (Hours)'
+          type: HTTP_AGENT
+          key: service-uptime
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''rts_gc_wall_ms'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return (parseInt(value.substring(2, value.length-2))/1000)/3600;'
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: eb2ff161063c45da8cc2ae674017ce0a
+          name: 'Cardano node: slot height'
+          type: HTTP_AGENT
+          key: slot-height
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_slotNum_int'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - |
+                  return parseInt(value.substring(2, value.length-2));
+                  
+          url: 'http://{HOST.IP}:12798/metrics'
+        -
+          uuid: f698af8990cb4e729e630ee831448b03
+          name: 'Cardano node: cardano-node-version'
+          key: 'system.run["/usr/local/bin/cardano-node version"]'
+          trends: '0'
+          status: DISABLED
+          value_type: TEXT
+          description: 'cardano-node version'
+          inventory_link: SOFTWARE_APP_B
+        -
+          uuid: 05d0a6523ab54b05a7bc5ca4ca2f7623
+          name: 'Cardano node: cardano-cli-version'
+          key: 'system.run[/usr/local/bin/cardano-cli version]'
+          trends: '0'
+          status: DISABLED
+          value_type: TEXT
+          description: 'cardano-cli version'
+          inventory_link: SOFTWARE_APP_C
+        -
+          uuid: fd0c9e00d5524f3fbffd144726e04f1e
+          name: 'Cardano node: peers warm (P2P)'
+          type: HTTP_AGENT
+          key: warm-peers-p2p
+          trends: '0'
+          preprocessing:
+            -
+              type: PROMETHEUS_TO_JSON
+              parameters:
+                - ''
+            -
+              type: JSONPATH
+              parameters:
+                - '$.[?(@.name == ''cardano_node_metrics_peerSelection_warm'')].value'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return parseInt(value.substring(2, value.length-2));'
+          url: 'http://{HOST.IP}:12798/metrics'
+      tags:
+        -
+          tag: class
+          value: service
+        -
+          tag: target
+          value: cardano-node

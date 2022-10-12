@@ -1,0 +1,243 @@
+zabbix_export:
+  version: '6.0'
+  date: '2022-10-12T13:37:24Z'
+  groups:
+    -
+      uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    -
+      uuid: 629371a92e06444ab33ee0f0c34078fc
+      template: 'Cardano Pool Monitoring MAINNET'
+      name: 'Cardano Pool Monitoring MAINNET'
+      groups:
+        -
+          name: Templates/Applications
+      items:
+        -
+          uuid: 76488b04cdba4b8a89f467d854b85fe8
+          name: 'Cardano Pool: active-stake'
+          type: HTTP_AGENT
+          key: active-stake-mnt
+          delay: 30m
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.stake_active
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: f635ccf3813947d1a6ec274f200cc291
+          name: 'Cardano Pool: delegators'
+          type: HTTP_AGENT
+          key: delegators-mnt
+          delay: 30m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.delegators
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return (Number(value)+1);'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 96d35c6aa0254ec299a73a7556ac616e
+          name: 'Cardano Pool: epoch-blocks'
+          type: HTTP_AGENT
+          key: epoch-blocks-mnt
+          delay: 10m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.blocks_epoch
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: da1fefdbc167408da9e71384c1d865b4
+          name: 'Cardano Pool: epoch-rewards'
+          type: HTTP_AGENT
+          key: epoch-rewards-mnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[0].reward_member'
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 13159cdce59a4d09b4fde26586b6f852
+          name: 'Cardano Pool: estimated-blocks'
+          type: HTTP_AGENT
+          key: estimated-blocks-mnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[0].blocks_est'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: d6637e9cbde34d269af65977f6e37d3d
+          name: 'Cardano Pool: lifetime-blocks'
+          type: HTTP_AGENT
+          key: lifetime-blocks-mnt
+          delay: 10m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.blocks_lifetime
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 7547a950b3434be580e3258dfc227066
+          name: 'Cardano Pool: luck'
+          type: HTTP_AGENT
+          key: luck-mnt
+          delay: 6h
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[2].luck'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 95e7eacc9b384d9ba50a524d6afbb2eb
+          name: 'Cardano Pool: name'
+          type: HTTP_AGENT
+          key: name-mnt
+          delay: 1d
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.name
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 2c7d912285f645ea9046e3ad4f043bd4
+          name: 'Cardano Pool: pledge'
+          type: HTTP_AGENT
+          key: pledge-mnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.pledge
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 35184b272aa14a49a8e48203073689d6
+          name: 'Cardano Pool: pool-cost'
+          type: HTTP_AGENT
+          key: pool-cost-mnt
+          delay: 6h
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.tax_fix
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: ab86e0f8731e4b3d881d9a81dc94cd51
+          name: 'Cardano Pool: pool-fees'
+          type: HTTP_AGENT
+          key: pool-fees-mnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.tax_ratio
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: d0bcc537be79407a9e56fb7475b11b76
+          name: 'Cardano Pool: rank'
+          type: HTTP_AGENT
+          key: rank-mnt
+          delay: 6h
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.position
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 1ae7095b3b5145e483682ca273a2fc63
+          name: 'Cardano Pool: roa-lifetime'
+          type: HTTP_AGENT
+          key: roa-lifetime-mnt
+          delay: 1d
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.roa_lifetime
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: 9d34467326b847fdaa954501e0aba3b4
+          name: 'Cardano Pool: roa'
+          type: HTTP_AGENT
+          key: roa-mnt
+          delay: 1d
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.roa_short
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+        -
+          uuid: c4222c8d6a4b4a769abb7f5de8c75f1a
+          name: 'Cardano Pool: total-stake'
+          type: HTTP_AGENT
+          key: total-stake-mnt
+          delay: 30m
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.stake
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://js.cexplorer.io/api-static/pool/{$POOL_ID_MNT}.json'
+      tags:
+        -
+          tag: component
+          value: 'cardano pool'
+      macros:
+        -
+          macro: '{$NETWORK_MNT}'
+          value: js.cexplorer.io
+        -
+          macro: '{$POOL_ID_MNT}'
+          value: pool1zkuqlvymj4q6y7r20hd8c5tp0ru6emcca7wf34c5dawjukusvzr

@@ -1,0 +1,240 @@
+zabbix_export:
+  version: '6.0'
+  date: '2022-10-12T13:37:46Z'
+  groups:
+    -
+      uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    -
+      uuid: 6dbc1bdf72c6478f832d1aa5b9d99e4d
+      template: 'Cardano Pool Monitoring TESTNET'
+      name: 'Cardano Pool Monitoring TESTNET'
+      groups:
+        -
+          name: Templates/Applications
+      items:
+        -
+          uuid: 0954c629876241a7984d6deff4a6e031
+          name: 'Cardano Pool: active-stake tnt'
+          type: HTTP_AGENT
+          key: active-stake-tnt
+          delay: 30m
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.stake_active
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+          tags:
+            -
+              tag: network
+              value: testnet
+        -
+          uuid: 38fcc7d344e7499cb113cdb5ab99d117
+          name: 'Cardano Pool: delegators tnt'
+          type: HTTP_AGENT
+          key: delegators-tnt
+          delay: 30m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[0].delegators'
+            -
+              type: JAVASCRIPT
+              parameters:
+                - 'return (Number(value)+1);'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: 987dc69ebed64a9b8041f74e9ec2ddde
+          name: 'Cardano Pool: epoch-blocks tnt'
+          type: HTTP_AGENT
+          key: epoch-blocks-tnt
+          delay: 10m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[0].blocks'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: 147ef7c323f14a5dbaccfb956bcc3bcc
+          name: 'Cardano Pool: epoch-rewards tnt'
+          type: HTTP_AGENT
+          key: epoch-rewards-tnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[0].reward_member'
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: 5784c2fe551e49bbaca8de7209d349aa
+          name: 'Cardano Pool: estimated-blocks tnt'
+          type: HTTP_AGENT
+          key: estimated-blocks-tnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[0].blocks_est'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: cb1c156cfa54407aafb35e14aa0fc06a
+          name: 'Cardano Pool: lifetime-blocks tnt'
+          type: HTTP_AGENT
+          key: lifetime-blocks-tnt
+          delay: 10m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.blocks_lifetime
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: fe1c8fdd7a0147cc966d056982e85efd
+          name: 'Cardano Pool: luck tnt'
+          type: HTTP_AGENT
+          key: luck-tnt
+          delay: 6h
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.data.stats.[2].luck'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: 71604ebc879942949cef0ac04d39809f
+          name: 'Cardano Pool: name tnt'
+          type: HTTP_AGENT
+          key: name-tnt
+          delay: 1d
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.name
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: e5fd8a902c0847f7a5fdc6fa7c8c18ac
+          name: 'Cardano Pool: pledge tnt'
+          type: HTTP_AGENT
+          key: pledge-tnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.pledge
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: e3f0fe4c24704e5c986ffa115f0b6681
+          name: 'Cardano Pool: pool-cost tnt'
+          type: HTTP_AGENT
+          key: pool-cost-tnt
+          delay: 6h
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.tax_fix
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: f02279f62b664f2987c3bfd7bb196caf
+          name: 'Cardano Pool: pool-fees tnt'
+          type: HTTP_AGENT
+          key: pool-fees-tnt
+          delay: 6h
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.tax_ratio
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: 0fd5b1e67a714d4087d8eb1952b1492c
+          name: 'Cardano Pool: rank tnt'
+          type: HTTP_AGENT
+          key: rank-tnt
+          delay: 6h
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.position
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: f5edb8d6ed68475e92b20930c2999833
+          name: 'Cardano Pool: roa-lifetime tnt'
+          type: HTTP_AGENT
+          key: roa-lifetime-tnt
+          delay: 1d
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.roa_lifetime
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: 5c31f72b4b804ed7a831bb6b44675f75
+          name: 'Cardano Pool: roa tnt'
+          type: HTTP_AGENT
+          key: roa-tnt
+          delay: 1d
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.roa_short
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+        -
+          uuid: 3692a2eaa609469ba70599c964f208b0
+          name: 'Cardano Pool: total-stake tnt'
+          type: HTTP_AGENT
+          key: total-stake-tnt
+          delay: 30m
+          value_type: FLOAT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.data.stake
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.000001'
+          url: 'https://preprod-js.cexplorer.io/api-static/pool/{$POOL_ID_TNT}'
+      macros:
+        -
+          macro: '{$POOL_ID_TNT}'
+          value: pool1szjdk0869wpqdt7vk067pz68dc496npph4fu6yltfsq7wf28n0h.json
